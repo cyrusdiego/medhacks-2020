@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export class MapContainer extends Component {
   render() {
@@ -7,6 +9,7 @@ export class MapContainer extends Component {
       <Map
         google={this.props.google}
         zoom={14}
+        // Edmonton
         initialCenter={{
           lat: 53.54,
           lng: -113.49,
@@ -17,5 +20,5 @@ export class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyCmSYG-wJ82zCvH4nOdsa4v1q8lNWTQ0JA',
+  apiKey: process.env.API_KEY,
 })(MapContainer);
