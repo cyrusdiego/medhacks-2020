@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import axios from 'axios';
 
 // Variables
 const GOOGLE_MAP_API_KEY = process.env.REACT_APP_API_KEY;
@@ -11,6 +12,12 @@ const myLocation = {
 const mapStyles = {
   width: '100%',
   height: '900px',
+};
+
+const testServer = () => {
+  return axios('http://localhost:3001/test', {
+    method: 'GET',
+  });
 };
 
 function GoogleMaps(props) {
@@ -37,6 +44,9 @@ function GoogleMaps(props) {
 
   // useEffect Hook
   useEffect(() => {
+    testServer().then((resp) => {
+      console.log(resp);
+    });
     const googleMapScript = document.createElement('script');
     googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_API_KEY}&libraries=places`;
     window.document.body.appendChild(googleMapScript);
