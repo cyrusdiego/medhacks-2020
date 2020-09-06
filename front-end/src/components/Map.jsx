@@ -9,8 +9,6 @@ const myLocation = {
   lng: -113.49,
 };
 
-const WEIGHT_SCALE = 1000;
-
 // styles
 const mapStyles = {
   width: '100%',
@@ -124,28 +122,19 @@ function GoogleMaps(props) {
       // ],
     });
 
-  const createMarker = (lat, lng) =>
-    new window.google.maps.Marker({
-      position: { lat: lat, lng: lng },
-      map: googleMap.current,
-    });
   const getWeight = (rf, s) => {
-    return rf * s * 10000;
+    return rf * s * 1000;
   };
+
   const getPoint = (buildings, riskFactors) => {
     let dataPoints = [];
-    // console.log('size: ' + rbuilding.size);
-    // console.log('weight: ' + riskFactors[i] * rows[i].size * WEIGHT_SCALE);
-    // console.log('radius: ' + riskFactors[i] * rows[i].size * RADIUS_SCALE);
     for (let i = 0; i < buildings.length; i++) {
-      console.log(buildings[i].size);
       dataPoints.push({
         location: new window.google.maps.LatLng(
           buildings[i].center.latitude,
           buildings[i].center.longitude
         ),
         weight: getWeight(riskFactors[i], buildings[i].size),
-        opacity: 1,
       });
     }
 
@@ -158,7 +147,21 @@ function GoogleMaps(props) {
       data: points,
       map: googleMap,
       options: {
-        radius: 5,
+        radius: 1,
+        opacity: 0.5,
+        dissipating: false,
+        gradient: [
+          '#3d5366',
+          '#277da1',
+          '#4d908e',
+          '#43aa8b',
+          '#90be6d',
+          '#f9c74f',
+          '#f9844a',
+          '#f8961e',
+          '#f3722c',
+          '#f94144',
+        ],
       },
     });
   };

@@ -43,6 +43,16 @@ class Row {
 
 let geojsonData = JSON.parse(fs.readFileSync('./generator/buildings.geojson'));
 let mockRows = [];
+function shuffle(a) {
+  var j, x, i;
+  for (i = a.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    x = a[i];
+    a[i] = a[j];
+    a[j] = x;
+  }
+  return a;
+}
 for (let i = 0; i < geojsonData.features.length; i++) {
   const coords = util.reverse_coords(
     geojsonData.features[i].geometry.coordinates
@@ -55,6 +65,9 @@ for (let i = 0; i < geojsonData.features.length; i++) {
   let row = new Row('', multi, cent, size, occup);
   mockRows.push(row);
 }
-const mockTable = new MockTable(mockRows);
+
+const shuffled = shuffle(mockRows).splice(0, mockRows.length / 100);
+
+const mockTable = new MockTable(shuffled);
 
 module.exports = mockTable;
