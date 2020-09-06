@@ -11,29 +11,32 @@ class FileStatsHandler(o.SimpleHandler):
 
     def __init__(self):
         super(FileStatsHandler, self).__init__()
-        self.length = 0.0
         self.areas = []
 
     # def node(self, n):
     #     pass
 
-    def way(self, w):
-        if 'building' in w.tags:
-            try:
-                # add to batch
-                x = 0
-            except o.InvalidLocationError:
-                # A location error might occur if the osm file is an extract
-                # where nodes of ways near the boundary are missing.
-                print("WARNING: way %d incomplete. Ignoring." % w.id)
+    # def way(self, w):
+    #     if 'building' in w.tags:
+    #         try:
+    #             # do something
+    #         except o.InvalidLocationError:
+    #             # A location error might occur if the osm file is an extract
+    #             # where nodes of ways near the boundary are missing.
+    #             print("WARNING: way %d incomplete. Ignoring." % w.id)
 
 
     # def relation(self, r):
     #     pass
 
     def area(self, a):
-        mp = factory.create_multipolygon(a)
-        self.areas.append(mp)
+        try:
+            mp = factory.create_multipolygon(a)
+            self.areas.append(mp)
+        except:
+            print("Error while creating multipolygon; likely invalid Area")
+
+        
 
 def write_GeoJSON(areas):
     features = []
