@@ -1,6 +1,9 @@
 import osmium as o
 import sys
 import copy
+import json
+import os 
+from geojson import Feature, FeatureCollection, dump
 
 factory = o.geom.GeoJSONFactory()
 
@@ -9,7 +12,7 @@ class FileStatsHandler(o.SimpleHandler):
     def __init__(self):
         super(FileStatsHandler, self).__init__()
         self.length = 0.0
-        self.areas = None
+        self.areas = []
 
     # def node(self, n):
     #     pass
@@ -30,7 +33,28 @@ class FileStatsHandler(o.SimpleHandler):
 
     def area(self, a):
         mp = factory.create_multipolygon(a)
-        self.areas = mp
+        self.areas.append(mp)
+
+def write_GeoJSON(areas):
+    features = []
+    for i in areas:
+        d = json.loads(i)    # load string repr of a dict into a dict
+        # remove extra lists from coordinates
+        coord = d.get('coordinates')
+        if coord:
+            if len(coord) != 4:
+                coord = coord[0][0]
+                d['coordinates'] = coord
+                features.append(Feature(geometry=d))
+            else:
+                print("Warning: expected to strip off dimensions of the coordinates list")
+
+    feature_collection = FeatureCollection(features)
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    dump_file = os.path.join(dir_path, 'buildings.geojson')
+    with open(dump_file, 'w') as f:
+        dump(feature_collection, f)
 
 
 def main(osmfile):
@@ -38,7 +62,8 @@ def main(osmfile):
 
     h.apply_file(osmfile, locations=True)
     if h.areas:
-        print(repr(h.areas))
+        print((h.areas))
+        write_GeoJSON(h.areas)
 
     return 0
 
