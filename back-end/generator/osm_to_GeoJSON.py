@@ -62,7 +62,6 @@ def main(osmfile):
 
     h.apply_file(osmfile, locations=True)
     if h.areas:
-        print((h.areas))
         write_GeoJSON(h.areas)
 
     return 0
