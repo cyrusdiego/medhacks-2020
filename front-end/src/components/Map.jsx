@@ -15,7 +15,7 @@ const mapStyles = {
 };
 
 const testServer = () => {
-  return axios('http://localhost:3001/test', {
+  return axios('http://localhost:3001/getTable', {
     method: 'GET',
   });
 };

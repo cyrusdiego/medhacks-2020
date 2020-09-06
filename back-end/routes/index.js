@@ -1,9 +1,10 @@
 const express = require('express');
 
 const router = express.Router();
+const mock = require('../mock');
 
-router.get('/test', (req, res) => {
-  res.send('Received a GET HTTP method');
+router.get('/getTable', (req, res) => {
+  res.send(mock);
 });
 
 module.exports = router;
