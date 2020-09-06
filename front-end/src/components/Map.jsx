@@ -9,7 +9,7 @@ const myLocation = {
   lng: -113.49,
 };
 
-const WEIGHT_SCALE = 10;
+const WEIGHT_SCALE = 1000;
 
 // styles
 const mapStyles = {
@@ -129,19 +129,22 @@ function GoogleMaps(props) {
       position: { lat: lat, lng: lng },
       map: googleMap.current,
     });
-
+  const getWeight = (rf, s) => {
+    return rf * s * 10000;
+  };
   const getPoint = (buildings, riskFactors) => {
     let dataPoints = [];
     // console.log('size: ' + rbuilding.size);
     // console.log('weight: ' + riskFactors[i] * rows[i].size * WEIGHT_SCALE);
     // console.log('radius: ' + riskFactors[i] * rows[i].size * RADIUS_SCALE);
     for (let i = 0; i < buildings.length; i++) {
+      console.log(buildings[i].size);
       dataPoints.push({
         location: new window.google.maps.LatLng(
           buildings[i].center.latitude,
           buildings[i].center.longitude
         ),
-        weight: riskFactors * buildings[i].size * WEIGHT_SCALE,
+        weight: getWeight(riskFactors[i], buildings[i].size),
         opacity: 1,
       });
     }
@@ -155,7 +158,7 @@ function GoogleMaps(props) {
       data: points,
       map: googleMap,
       options: {
-        radius: 10,
+        radius: 5,
       },
     });
   };

@@ -50,7 +50,7 @@ for (let i = 0; i < geojsonData.features.length; i++) {
   const multi = coords;
   const cent = geolib.getCenter(util.coord_list_to_dict(coords));
   const size = geolib.getAreaOfPolygon(coords);
-  const occup = util.randomIntFromInterval(1, 100);
+  const occup = Math.ceil(util.randomIntFromInterval(1, 100));
   // TODO: name
   let row = new Row('', multi, cent, size, occup);
   mockRows.push(row);
